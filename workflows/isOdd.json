@@ -1,0 +1,17 @@
+{
+  "connection": "isOdd",
+  "workflow": [
+    {
+      "label": "INIT",
+      "function": "print",
+      "returns": { "true": "CHECK_ODD" }
+    },
+    { "label": "INC", "function": "increase", "returns": { "true": "PRINT" } },
+    { "label": "PRINT", "function": "print", "returns": { "true": "END" } },
+    {
+      "label": "CHECK_ODD",
+      "function": "isOdd",
+      "returns": { "true": "PRINT", "false": "INC" }
+    }
+  ]
+}
