@@ -58,12 +58,12 @@ fs.readdir("./workflows", function (err, filenames) {
     });
     app.post(
       "/connection/" + filename.replace(".json", ""),
-      function (req, res) {
+      async function (req, res) {
         try {
           res.header("Access-Control-Allow-Origin", "*");
           res.header("Access-Control-Allow-Headers", "*");
           res.send({
-            data: evaluateWorkflow(
+            data: await evaluateWorkflow(
               filename.replace(".json", ""),
               req.body.data
             ),
@@ -81,13 +81,13 @@ fs.readdir("./workflows", function (err, filenames) {
   console.log("Workflow endpoints ready!");
 });
 
-function evaluateWorkflow(w, data) {
+async function evaluateWorkflow(w, data) {
   let workflow = workflows[w];
   let currentStep = workflow.workflow.find((r) => r.label == "INIT");
   let returnLabel = "INIT";
   do {
     console.log(currentStep);
-    result = functions[currentStep.function](data);
+    result = await functions[currentStep.function](data);
     returnLabel = currentStep.returns[result.result];
     data = result.data;
     currentStep = workflow.workflow.find((r) => r.label == returnLabel);
